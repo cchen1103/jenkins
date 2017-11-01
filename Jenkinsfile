@@ -14,4 +14,15 @@ pipeline {
       }
     }
   }
+  post {
+    success {
+      echo "Push docker image to dockerhub"
+      sh '''
+        docker push cchen1103/jenkins
+      '''
+    }
+    failure {
+      echo "Build docker image failed"
+    }
+  }
 }
