@@ -1,7 +1,7 @@
 node {
   def jenkins
 
-  stage('Pull jenkins repo')
+  stage('Pull jenkins repo') {
     /* Pull jenkins docker builder git repo */
 
     checkout scm
@@ -33,3 +33,4 @@ node {
     }
 
   }
+}
