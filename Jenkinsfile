@@ -1,28 +1,35 @@
-pipeline {
-  agent {
-    node {
-      label 'master'
-    }
+node {
+  def jenkins
+
+  stage('Pull jenkins repo')
+    /* Pull jenkins docker builder git repo */
+
+    checkout scm
+
   }
-  stages {
-    stage('Jenkins Docker Image Build') {
-      steps {
-        sh '''
-          echo "Build Jenkins Docker Image Through Dockerfile"
-          docker build . --tag cchen1103/jenkins
-        '''
-      }
-    }
+
+  stage('Build jenkins image') {
+    /* Build jenkins docker image */
+
+    jenkins = docker.build("cchen1103/jenkins")
+
   }
-  post {
-    success {
-      echo "Push docker image to dockerhub"
-      sh '''
-        docker push cchen1103/jenkins
-      '''
+
+  stage('Test jenkins image') {
+    /* Launch jenkins */
+
+    jenkins.inside {
+      java -Djava.awt.headless=true -jar jenkins.war
     }
-    failure {
-      echo "Build docker image failed"
-    }
+
   }
-}
+
+  stage('Push jenkins image') {
+    /* Push jenkins image to dockerhub */
+
+    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+      jenkins.push("${env.BUILD_NUMBER}")
+      jenkins.push("latest")
+    }
+
+  }
