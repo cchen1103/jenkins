@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    node 'master'
+  }
   stages {
     stage('Jenkins Docker Image Build') {
       steps {
