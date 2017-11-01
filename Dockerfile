@@ -24,7 +24,6 @@ RUN addgroup -S -g 10000 jenkins \
 RUN touch /var/run/docker.sock && chown jenkins:jenkins /var/run/docker.sock
 
 VOLUME ["${JENKINS_HOME}"]
-VOLUME ["/var/run/docker.sock"]
 USER jenkins
 WORKDIR ${JENKINS_HOME}
 ENV JENKINS_HOME=${JENKINS_HOME}
