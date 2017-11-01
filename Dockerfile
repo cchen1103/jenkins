@@ -17,15 +17,14 @@ RUN apk add --update --no-cache \
   bash \
   python \
   wget
+WORKDIR ${JENKINS_HOME}
 RUN wget http://updates.jenkins-ci.org/download/war/${VERSION}/jenkins.war
 RUN addgroup -S -g 10000 jenkins \
   && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins jenkins \
   && chown jenkins:jenkins ${JENKINS_HOME}
-RUN touch /var/run/docker.sock && chown jenkins:jenkins /var/run/docker.sock
 
 VOLUME ["${JENKINS_HOME}"]
 USER jenkins
-WORKDIR ${JENKINS_HOME}
 ENV JENKINS_HOME=${JENKINS_HOME}
 ENTRYPOINT ["entrypoint.sh"]
 CMD "--help"
