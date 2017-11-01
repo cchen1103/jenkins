@@ -13,16 +13,19 @@ RUN apk add --update --no-cache \
   fontconfig \
   ttf-dejavu \
   git \
+  docker \
   bash \
   python \
   wget
 RUN wget http://updates.jenkins-ci.org/download/war/${VERSION}/jenkins.war
 RUN addgroup -S -g 10000 jenkins \
   && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins jenkins \
-  && chown jenkins:jenkins ${JENKINS_HOME}
+  && chown jenkins:jenkins ${JENKINS_HOME} \
+  && usermod -aG docker jenkins
 
 VOLUME ["${JENKINS_HOME}"]
 USER jenkins
+WORKDIR ${JENKINS_HOME}
 ENV JENKINS_HOME=${JENKINS_HOME}
 ENTRYPOINT ["entrypoint.sh"]
 CMD "--help"

@@ -21,6 +21,7 @@ usage() {
 	EXAMPLES:
 	    Run jenkins server:
 	    docker run -d -p 8080:8080 -v <local storage>:/jenkins cchen1103/jenkins
+				-v /var/run/docker.sock:/var/run/docker.sock
 
 	    Show help message:
 	    docker run cchen1103/jenkins --help
