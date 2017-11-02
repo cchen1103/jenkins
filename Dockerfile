@@ -16,6 +16,7 @@ RUN apk add --update --no-cache \
   docker \
   bash \
   python \
+  shadow \
   wget
 
 RUN cd / && \
@@ -23,9 +24,7 @@ RUN cd / && \
 RUN addgroup -S -g 10000 jenkins \
   && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins jenkins \
   && chown jenkins:jenkins ${JENKINS_HOME}
-RUN touch /var/run/docker.sock && chown jenkins:jenkins /var/run/docker.sock
 
-VOLUME ["/var/run/docker.sock"]
 VOLUME ["${JENKINS_HOME}"]
 USER jenkins
 ENV JENKINS_HOME=${JENKINS_HOME}
