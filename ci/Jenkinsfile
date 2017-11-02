@@ -18,8 +18,8 @@ node('master'){
   stage('Test jenkins image') {
     /* Launch jenkins */
 
-    jenkins.withRun('-p 10080:8080') {
-      sh 'docker ps'
+    jenkins.withRun('-p 10080:8080') { c->
+      sh 'curl -i http://${hostIp(c):8080'
     }
 
   }
