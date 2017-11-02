@@ -18,8 +18,8 @@ node('master'){
   stage('Test jenkins image') {
     /* Launch jenkins */
 
-    jenkins.inside {
-      sh 'java -Djava.awt.headless=true -jar /jenkins.war'
+    jenkins.withRun {
+      sh 'docker ps'
     }
 
   }
