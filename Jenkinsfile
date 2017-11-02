@@ -19,7 +19,7 @@ node('master'){
     /* Launch jenkins */
 
     jenkins.inside {
-      sh 'java -Djava.awt.headless=true -jar jenkins.war'
+      sh 'java -Djava.awt.headless=true -jar /jenkins.war'
     }
 
   }

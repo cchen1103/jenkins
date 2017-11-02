@@ -70,7 +70,7 @@ main() {
 
 	opt_parser $ARGS
 
-	java -Djava.awt.headless=true -jar jenkins.war ${OPT}
+	java -Djava.awt.headless=true -jar /jenkins.war ${OPT}
 
 }
 
