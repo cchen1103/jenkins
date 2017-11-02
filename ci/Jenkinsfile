@@ -1,6 +1,11 @@
 node('master'){
   def jenkins
 
+  def hostIp(container) {
+    sh "docker inspect -f {{.Node.Ip}} ${container.id} > hostIp"
+    readFile('hostIp').trim()
+  }
+  
   stage('Pull jenkins repo') {
     /* Pull jenkins docker builder git repo */
 
