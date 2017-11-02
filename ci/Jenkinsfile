@@ -1,8 +1,3 @@
-def hostIp(container) {
-  sh "docker inspect -f {{.Node.Ip}} ${container.id} > hostIp"
-  readFile('hostIp').trim()
-}
-
 node('master'){
   def jenkins
 
@@ -23,8 +18,8 @@ node('master'){
   stage('Test jenkins image') {
     /* Launch jenkins */
 
-    jenkins.withRun('-p 10080:8080') { c ->
-      sh "curl -i http://${hostIp(c)}:8080/"
+    jenkins.withRun { c ->
+      sh "docker logs ${c.id}"
     }
 
   }
