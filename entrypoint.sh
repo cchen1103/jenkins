@@ -70,6 +70,7 @@ main() {
 
 	opt_parser $ARGS
 
+	sudo chown jenkins:jenkins /var/run/docker.sock
 	java -Djava.awt.headless=true -jar /jenkins.war ${OPT}
 
 }
