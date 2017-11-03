@@ -20,7 +20,10 @@ node('master'){
 
     jenkins.withRun { c ->
       docker.image('--link ${c.id}:jenkins alpine').inside {
+
+        sh "apk add curl"
         sh "curl http://jenkins:8080"
+
       }
     }
 

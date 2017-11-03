@@ -16,7 +16,7 @@ RUN apk add --update --no-cache \
   docker \
   bash \
   python \
-  shadow \
+  sudo \
   wget
 
 RUN cd / && \
