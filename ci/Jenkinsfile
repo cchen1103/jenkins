@@ -19,7 +19,9 @@ node('master'){
     /* Launch jenkins */
 
     jenkins.withRun { c ->
-      sh "docker logs ${c.id}"
+      docker.image('--link ${c.id}:jenkins alpine').inside {
+        sh "curl http://jenkins:8080"
+      }
     }
 
   }
