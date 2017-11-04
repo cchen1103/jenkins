@@ -18,7 +18,7 @@ node('master'){
   stage('Test jenkins image') {
     /* Launch jenkins */
 
-    jenkins.withRun(-v /var/run/docker.sock:/var/run/docker.sock) { c ->
+    jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
       docker.image('alpine').inside("--link ${c.id}:jenkins") {
 
         sh 'apk --update add curl'
