@@ -22,10 +22,10 @@ RUN apk add --update --no-cache \
 RUN cd / && \
   wget http://updates.jenkins-ci.org/download/war/${VERSION}/jenkins.war
 RUN addgroup -S -g 10000 jenkins \
-  && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins,wheel jenkins \
+  && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins jenkins \
   && chown jenkins:jenkins ${JENKINS_HOME}
 RUN sed -e 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/g' \
-      -i /etc/sudoers && useradd jenkins wheel
+      -i /etc/sudoers && addgroup jenkins wheel
 
 VOLUME ["${JENKINS_HOME}"]
 USER jenkins
