@@ -70,6 +70,11 @@ main() {
 
 	opt_parser $ARGS
 
+	if [ ! -e /var/run/docker.sock ]; then
+		usage()
+		exit -1
+	fi
+
 	sudo chown jenkins:jenkins /var/run/docker.sock
 	java -Djava.awt.headless=true -jar /jenkins.war ${OPT}
 
