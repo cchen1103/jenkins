@@ -24,6 +24,8 @@ RUN cd / && \
 RUN addgroup -S -g 10000 jenkins \
   && adduser -S -u 10000 -h ${JENKINS_HOME} -G jenkins jenkins \
   && chown jenkins:jenkins ${JENKINS_HOME}
+RUN sed -e 's/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/g' \
+      -i /etc/sudoers && useradd jenkins wheel
 
 VOLUME ["${JENKINS_HOME}"]
 USER jenkins
