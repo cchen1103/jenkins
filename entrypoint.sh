@@ -20,8 +20,8 @@ usage() {
 
 	EXAMPLES:
 	    Run jenkins server:
-	    docker run -d -p 8080:8080 -v <local storage>:/jenkins \
-				-v /var/run/docker.sock:/var/run/docker.sock cchen1103/jenkins
+	    docker run -d [-p 8080:8080] -v <local storage>:/jenkins]s \
+				[-v /var/run/docker.sock:/var/run/docker.sock] cchen1103/jenkins
 
 	    Show help message:
 	    docker run cchen1103/jenkins --help
