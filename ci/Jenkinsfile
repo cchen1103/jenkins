@@ -18,6 +18,13 @@ node('master'){
   stage('Test jenkins image') {
     /* Launch jenkins */
 
+    /* Test jenkins help */
+    jenkins.withRun('-h') {}
+
+    /* Test jenkins version */
+    jenkins.withRun('-v') {}
+    
+    /* Test jenkins application */
     jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
       docker.image('alpine').inside("--link ${c.id}:jenkins --user=root") {
 

@@ -31,7 +31,7 @@ VOLUME ["${JENKINS_HOME}"]
 USER jenkins
 ENV JENKINS_HOME=${JENKINS_HOME}
 ENTRYPOINT ["entrypoint.sh"]
-CMD "-p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock"
+CMD "-h"
 
 LABEL description="standalone jenkins master in docker"
 LABEL version="${VERSION}"

@@ -17,11 +17,13 @@ usage() {
 
 	OPTIONS:
 	    -h --help			show this help
+			-v --version	show jenkins version
+			-s --server		run jenkins server
 
 	EXAMPLES:
 	    Run jenkins server:
-	    docker run -d [-p 8080:8080] -v <local storage>:/jenkins]s \
-				[-v /var/run/docker.sock:/var/run/docker.sock] cchen1103/jenkins
+	    docker run -d -p 8080:8080 -v <local storage>:/jenkins \
+				-v /var/run/docker.sock:/var/run/docker.sock cchen1103/jenkins
 
 	    Show help message:
 	    docker run cchen1103/jenkins --help
@@ -46,10 +48,14 @@ opt_parser() {
 	eval set -- $args
 
 	OPT=
-	while getopts "hms" OPTION; do
+	while getopts "hvs" OPTION; do
 		case $OPTION in
 		h)
 			usage
+			exit 0
+			;;
+		v)
+			java -Djava.awt.headless=true -jar /jenkins.war --version
 			exit 0
 			;;
 		*)
