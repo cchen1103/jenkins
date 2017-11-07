@@ -19,11 +19,11 @@ node('master'){
     /* Launch jenkins */
 
     /* Test jenkins help */
-    jenkins.withRun('-h') {}
+    jenkins.run('--help') {}
 
     /* Test jenkins version */
-    jenkins.withRun('-v') {}
-    
+    jenkins.run('-v') {}
+
     /* Test jenkins application */
     jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
       docker.image('alpine').inside("--link ${c.id}:jenkins --user=root") {
