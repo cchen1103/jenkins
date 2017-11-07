@@ -33,7 +33,7 @@ ENV JENKINS_HOME=${JENKINS_HOME}
 ENTRYPOINT ["entrypoint.sh"]
 CMD "-h"
 
-HEALTHCHECK --start-peroid=1m \
+HEALTHCHECK --start-period=1m \
   CMD  nc -nz local:8080
 
 LABEL description="standalone jenkins master in docker"
