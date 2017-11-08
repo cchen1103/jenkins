@@ -34,7 +34,7 @@ ENTRYPOINT ["entrypoint.sh"]
 CMD "-h"
 
 HEALTHCHECK --start-period=1m \
-  CMD  nc -nz local:8080
+  CMD  nc -nz localhost:8080
 
 LABEL description="standalone jenkins master in docker"
 LABEL version="${VERSION}"
