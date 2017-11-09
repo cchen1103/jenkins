@@ -45,4 +45,19 @@ node('master'){
     }
 
   }
+
+  /* Only bump up version when it is ready for release */
+  /* The version bump up in release/master branch will
+     trigger other integration pipeline build */
+
+  stage('Bump up version') {
+    /* Bump up jenkins docker image version and Dockfile version */
+
+    sh 'git checkout master'
+    sh 'git merge dev'
+    # sh 'git tag '
+    sh 'git commit -am "Promote from dev ${env.BUILD_NUMBER} to master"'
+    sh 'git push'
+
+  }
 }
