@@ -53,11 +53,11 @@ node('master'){
   stage('Bump up version') {
     /* Bump up jenkins docker image version and Dockfile version */
 
-    sh 'git checkout master'
-    sh 'git merge dev'
-    /* sh 'git tag ' */
-    sh 'git commit -am "Promote from dev ${env.BUILD_NUMBER} to master"'
-    sh 'git push'
-
+    sh ('git checkout master')
+    sh ('git merge dev')
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+        sh("git tag -a integration-${env.BUILD_NUMBER} -m 'Jenkins promote'")
+        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cchen1103/jenkins.git --tags')
+    }
   }
 }
