@@ -55,7 +55,7 @@ node('master'){
 
     sh 'git checkout master'
     sh 'git merge dev'
-    # sh 'git tag '
+    /* sh 'git tag ' */
     sh 'git commit -am "Promote from dev ${env.BUILD_NUMBER} to master"'
     sh 'git push'
 
