@@ -82,7 +82,7 @@ finally {
     // send email notification for build failure or unstable build
     step([$class: 'Mailer',
     notifyEveryUnstablesBuild: true,
-    recipients: "${email_to}",
+    recipients: recipient,
     sendToIndividuals: true])
   }
 
