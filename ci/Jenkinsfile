@@ -68,7 +68,6 @@ try {
   }
 } // end of try
 catch (exc) {
-  err = caughtError
   currentBuild.result = 'FAILURE'
   /*
   mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
@@ -88,6 +87,7 @@ finally {
   }
 
   // Must re-throw exception to propagate error:
+  err = caughtError
   if (err) {
     throw err
   }
