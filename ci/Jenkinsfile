@@ -1,63 +1,93 @@
-node('master'){
-  def jenkins
 
-  stage('Pull jenkins repo') {
-    /* Pull jenkins docker builder git repo */
+try {
 
-    checkout scm
+  node {
+    def jenkins
 
-  }
+    stage('Pull jenkins repo') {
+      /* Pull jenkins docker builder git repo */
 
-  stage('Build jenkins image') {
-    /* Build jenkins docker image */
+      checkout scm
 
-    jenkins = docker.build("cchen1103/jenkins")
+    }
 
-  }
+    stage('Build jenkins image') {
+      /* Build jenkins docker image */
 
-  stage('Test jenkins image') {
-    /* Launch jenkins */
+      jenkins = docker.build("cchen1103/jenkins")
 
-    /* Test jenkins help */
-    jenkins.withRun('','--help') {}
+    }
 
-    /* Test jenkins version */
-    jenkins.withRun('','-v') {}
+    stage('Test jenkins image') {
+      /* Launch jenkins */
 
-    /* Test jenkins application */
-    jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
-      docker.image('alpine').inside("--link ${c.id}:jenkins --user=root") {
+      /* Test jenkins help */
+      jenkins.withRun('','--help') {}
 
-        sh('apk --update add curl')
-        sh('curl http://jenkins:8080')
+      /* Test jenkins version */
+      jenkins.withRun('','-v') {}
 
+      /* Test jenkins application */
+      jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
+        docker.image('alpine').inside("--link ${c.id}:jenkins --user=root") {
+
+          sh('apk --update add curl')
+          sh('curl http://jenkins:8080')
+
+        }
+      }
+
+    }
+
+    stage('Push jenkins image') {
+      /* Push jenkins image to dockerhub */
+
+      docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+        jenkins.push("${env.BUILD_NUMBER}")
+        jenkins.push("latest")
+      }
+
+    }
+
+    /* Only bump up version when it is ready for release */
+    /* The version bump up in release/master branch will
+       trigger other integration pipeline build */
+
+    stage('Tag repo version') {
+      /* Tag jenkins Dockerfile version */
+
+      withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+          sh('git config user.name "jenkins"')
+          sh('git config user.email "jenkins@ci.org"')
+          sh("git tag -a integration-${env.BUILD_NUMBER} -m 'Jenkins promote'")
+          sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cchen1103/jenkins.git --tags')
       }
     }
-
+  }
+} // end of try
+catch (exc) {
+  /*
+  err = caughtError
+  currentBuild.result = 'FAILURE'
+  String recipient = 'jenkins_docker_devteam@ci.org'
+  mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
+       body: "Jenkins docker image build failed at ${env.BUILD_URL}",
+       to: recipient,
+       replyTo: recipient,
+       from: 'noreply@ci.org'
+  */
+}
+finally {
+  (currentBuild.result != "ABORTED") && node('master') {
+    // send email notification for build failure or unstable build
+    step([$class: 'Mailer',
+    notifyEveryUnstablesBuild: true,
+    recipients: "${email_to}",
+    sendToIndividuals: true])
   }
 
-  stage('Push jenkins image') {
-    /* Push jenkins image to dockerhub */
-
-    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-      jenkins.push("${env.BUILD_NUMBER}")
-      jenkins.push("latest")
-    }
-
-  }
-
-  /* Only bump up version when it is ready for release */
-  /* The version bump up in release/master branch will
-     trigger other integration pipeline build */
-
-  stage('Tag repo version') {
-    /* Tag jenkins Dockerfile version */
-
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-        sh('git config user.name "jenkins"')
-        sh('git config user.email "jenkins@ci.org"')
-        sh("git tag -a integration-${env.BUILD_NUMBER} -m 'Jenkins promote'")
-        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cchen1103/jenkins.git --tags')
-    }
+  // Must re-throw exception to propagate error:
+  if (err) {
+    throw err
   }
 }
