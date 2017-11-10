@@ -1,9 +1,8 @@
-//def email_to='nobody@ci.org'
+def email_to='jenkins.docker@ci.org'
 
 try {
 
   node {
-    def email_to = 'jenkins_docker_devteam@ci.org'
     def jenkins
 
     stage('Pull jenkins repo') {
