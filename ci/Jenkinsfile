@@ -1,9 +1,9 @@
-def email_to='nobody@ci.org'
+//def email_to='nobody@ci.org'
 
 try {
 
   node {
-    //def email_to = 'jenkins_docker_devteam@ci.org'
+    def email_to = 'jenkins_docker_devteam@ci.org'
     def jenkins
 
     stage('Pull jenkins repo') {
@@ -69,9 +69,9 @@ try {
   }
 } // end of try
 catch (exc) {
-  /*
   err = caughtError
   currentBuild.result = 'FAILURE'
+  /*
   mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
        body: "Jenkins docker image build failed at ${env.BUILD_URL}",
        to: "${email_to}",
