@@ -50,11 +50,9 @@ node('master'){
   /* The version bump up in release/master branch will
      trigger other integration pipeline build */
 
-  stage('Bump up version') {
-    /* Bump up jenkins docker image version and Dockfile version */
+  stage('Tag repo version') {
+    /* Tag jenkins Dockerfile version */
 
-    sh ('git checkout master')
-    sh ('git merge origin/dev')
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
         sh('git config user.name "jenkins"')
         sh('git config user.email "jenkins@ci.org"')
