@@ -1,3 +1,4 @@
+def email_to='nobody@ci.org'
 
 try {
 
@@ -56,7 +57,7 @@ try {
 
     stage('Tag repo version') {
       /* Tag jenkins Dockerfile version */
-
+      sh("echo ${email_to}")
       withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
           sh('git config user.name "jenkins"')
           sh('git config user.email "jenkins@ci.org"')
@@ -64,6 +65,7 @@ try {
           sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cchen1103/jenkins.git --tags')
       }
     }
+
   }
 } // end of try
 catch (exc) {
