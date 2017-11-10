@@ -2,6 +2,7 @@
 try {
 
   node {
+    def email_to = 'jenkins_docker_devteam@ci.org'
     def jenkins
 
     stage('Pull jenkins repo') {
@@ -69,11 +70,10 @@ catch (exc) {
   /*
   err = caughtError
   currentBuild.result = 'FAILURE'
-  String recipient = 'jenkins_docker_devteam@ci.org'
   mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
        body: "Jenkins docker image build failed at ${env.BUILD_URL}",
-       to: recipient,
-       replyTo: recipient,
+       to: "${email_to}",
+       replyTo: "${email_to}",
        from: 'noreply@ci.org'
   */
 }
@@ -82,7 +82,7 @@ finally {
     // send email notification for build failure or unstable build
     step([$class: 'Mailer',
     notifyEveryUnstablesBuild: true,
-    recipients: recipient,
+    recipients: "${email_to}",
     sendToIndividuals: true])
   }
 
