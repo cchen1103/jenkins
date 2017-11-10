@@ -1,3 +1,10 @@
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+
 def email_to='jenkins.docker@ci.org'
 
 try {
@@ -67,7 +74,8 @@ try {
 
   }
 } // end of try
-catch (err) {
+catch (exc) {
+  err = caughtError
   currentBuild.result = 'FAILURE'
   /*
   mail subject: "${env.JOB_NAME} (${env.BUILD_NUMBER}) failed",
