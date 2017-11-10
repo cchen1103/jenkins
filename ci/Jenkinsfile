@@ -28,8 +28,8 @@ node('master'){
     jenkins.withRun('-v /var/run/docker.sock:/var/run/docker.sock') { c ->
       docker.image('alpine').inside("--link ${c.id}:jenkins --user=root") {
 
-        sh 'apk --update add curl'
-        sh 'curl http://jenkins:8080'
+        sh('apk --update add curl')
+        sh('curl http://jenkins:8080')
 
       }
     }
@@ -54,9 +54,11 @@ node('master'){
     /* Bump up jenkins docker image version and Dockfile version */
 
     sh ('git checkout master')
-    sh ('git merge dev')
+    sh ('git merge origin/dev')
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'da1ed28a-4ce3-4b5a-9091-dbf2e43c4262', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
         sh("git tag -a integration-${env.BUILD_NUMBER} -m 'Jenkins promote'")
+        sh('git config --global user.name "jenkins"')
+        sh('git config --global user.email "jenkins@ci.org"')
         sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/cchen1103/jenkins.git --tags')
     }
   }
